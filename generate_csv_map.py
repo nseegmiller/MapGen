@@ -1,4 +1,4 @@
-__author__ = 'Nick'
+__author__ = "Nick"
 
 import csv
 import sys
@@ -9,7 +9,7 @@ MAP_HEIGHT = 200
 DEFAULT_TILE = 1999
 DUG_TILE = 2
 CHANCE_TO_SPAWN_MINER = 0.08
-FILENAME = 'game/static.csv'
+FILENAME = "game/static.csv"
 DEFAULT_SEED = 7363839
 MAX_MINERS = 400
 
@@ -68,7 +68,7 @@ class Miner(object):
                     has_dug = True
                     break
         number = random.random()
-        print 'Random chance: ' + str(number)
+        print("Random chance: " + str(number))
         if not has_dug:
             self.active = False
         else:
@@ -97,27 +97,31 @@ class Miner(object):
                         if new_x < MAP_WIDTH:
                             new_miner_x = new_x
                             break
-                print 'Spawning miner at: ' + str(new_miner_x) + ', ' + str(new_miner_y)
+                print("Spawning miner at: " + str(new_miner_x) + ", " + str(new_miner_y))
                 if map[new_miner_x][new_miner_y] == DEFAULT_TILE:
                     map[new_miner_x][new_miner_y] = DUG_TILE
                 miners.append(Miner(new_miner_x, new_miner_y))
 
     def __repr__(self):
-        return '(' + str(self.x) + ', ' + str(self.y) + ')'
+        return "(" + str(self.x) + ", " + str(self.y) + ")"
 
-miners = [Miner(MAP_WIDTH / 2, MAP_HEIGHT / 2)]
-print miners
+miners = [Miner(int(MAP_WIDTH / 2), int(MAP_HEIGHT / 2))]
+
 while True:
     if len(miners) >= MAX_MINERS:
         break;
     num_miners = len(miners)
-    print 'Num Miners: ' + str(num_miners)
+    print("Num Miners: " + str(num_miners))
 
     for i in range(0, num_miners):
         miners[i].pick_cell(miners)
 
 # Writes the file
-with open(FILENAME, 'wb') as csvfile:
-    writer = csv.writer(csvfile)
+with open(FILENAME, "w") as csvfile:
     for row in map:
-        writer.writerow(row)
+        for column in row:
+            csvfile.write(str(column) + ',' + str(column) + ',')
+        csvfile.write("\n")
+        for column in row:
+            csvfile.write(str(column) + ',' + str(column) + ',')
+        csvfile.write("\n")
